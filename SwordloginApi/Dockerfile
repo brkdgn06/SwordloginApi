@@ -9,7 +9,6 @@ WORKDIR /src
 COPY . .
 RUN dotnet restore "SwordloginApi/SwordloginApi.csproj"
 RUN dotnet publish "SwordloginApi/SwordloginApi.csproj" -c Release -o /app/publish
-RUN dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget
 
 # 3. Final image
 FROM base AS final
