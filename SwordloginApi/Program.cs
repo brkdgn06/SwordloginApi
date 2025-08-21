@@ -15,7 +15,8 @@ builder.Services.AddSwaggerGen();
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(5000); // Tüm IP'lerden gelen istekleri dinler
+    options.ListenAnyIP(int.Parse(Environment.GetEnvironmentVariable("PORT") ?? "10000"));
+    // Tüm IP'lerden gelen istekleri dinler
 });
 builder.Services.AddCors(options =>
 {
