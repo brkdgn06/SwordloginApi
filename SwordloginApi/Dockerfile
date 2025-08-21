@@ -1,16 +1,15 @@
-# ASP.NET Core için çalışma ortamı
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+# Build aşaması
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Derleme ortamı
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
-COPY . .
-RUN dotnet restore
-RUN dotnet publish -c Release -o /app/publish
+COPY . ./
+RUN dotnet restore ./SwordloginApi.csproj
 
-# Yayınlanan dosyaları çalıştır
-FROM base AS final
+RUN dotnet publish -c Release -o out
+RUN dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget
+# Runtime aşaması
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-COPY --from=build /app/publish .
+
+COPY --from=build /app/out ./
 ENTRYPOINT ["dotnet", "SwordloginApi.dll"]
