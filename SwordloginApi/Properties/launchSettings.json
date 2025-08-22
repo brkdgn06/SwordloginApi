@@ -14,7 +14,7 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://login-api-gg6c.onrender.com/api/login",
+      "applicationUrl": "https://swordloginapi-8av4.onrender.com//api/login",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
