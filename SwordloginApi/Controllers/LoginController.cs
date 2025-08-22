@@ -26,7 +26,7 @@ namespace SwordloginApi.Controllers
                 return Unauthorized(new { message = "Kullanıcı adı veya şifre hatalı" });
 
             // Role bilgisi bit tipinde: 0 = normal, 1 = admin
-            bool isAdmin = user.Role == 1;
+            bool isAdmin = user.Role == "admin";
 
             return Ok(new
             {
