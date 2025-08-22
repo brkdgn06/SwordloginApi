@@ -25,7 +25,18 @@ namespace SwordloginApi.Controllers
             if (user == null)
                 return Unauthorized(new { message = "Kullanıcı adı veya şifre hatalı" });
 
-            return Ok(new { message = "Giriş başarılı", userId = user.Id });
+            // Role bilgisi bit tipinde: 0 = normal, 1 = admin
+            bool isAdmin = user.Role == 1;
+
+            return Ok(new
+            {
+                message = "Giriş başarılı",
+                userId = user.Id,
+                username = user.Username,
+                role = isAdmin // Unity tarafında bool olarak karşılanabilir
+            });
+
         }
+
     }
 }
