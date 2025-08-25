@@ -30,7 +30,8 @@ namespace SwordloginApi.Controllers
             {
                 message = "Giriş başarılı", 
                 userId = user.Id, 
-                username = user.Username,   
+                username = user.Username,
+                role = user.Role // Role bilgisi doğrudan dönüyor
             });
 
         }

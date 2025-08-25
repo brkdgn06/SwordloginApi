@@ -1,17 +1,17 @@
 using Microsoft.EntityFrameworkCore;
-using SwordloginApi.Data;
 using Microsoft.EntityFrameworkCore.SqlServer;
+using SwordloginApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.WebHost.UseUrls("http://0.0.0.0:10000");
 builder.WebHost.ConfigureKestrel(options =>
 {
