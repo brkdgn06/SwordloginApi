@@ -65,7 +65,7 @@ namespace SwordloginApi.Controllers
                 userId = user.Id,
                 username = user.Username,
                 role = user.Role, // Role bilgisi doğrudan dönüyor
-                token = tokenString
+                token = tokenString // Token çağırıyor
 
             });
 
