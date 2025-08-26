@@ -22,12 +22,6 @@ namespace SwordloginApi.Controllers
             _config = config;
         }
 
-
-        public LoginController(AppDbContext context)
-        {
-            _context = context;
-        }
-
         [HttpPost]
         public IActionResult Login([FromBody] User request)
         {
@@ -45,12 +39,12 @@ namespace SwordloginApi.Controllers
         new Claim("username", user.Username)
     };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("gizliAnahtar123")); // config'den alınabilir
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Jwt:Key")); // config'den alınabilir
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: "ARSServer",
-                audience: "ARSClient",
+                issuer: "Jwt:Issuer",
+                audience: "Jwt:Audience",
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: creds
