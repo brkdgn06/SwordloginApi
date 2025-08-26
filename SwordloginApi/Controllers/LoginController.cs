@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using SwordloginApi.Data;
 using SwordloginApi.Models;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace SwordloginApi.Controllers
 {
@@ -11,6 +15,13 @@ namespace SwordloginApi.Controllers
     public class LoginController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IConfiguration _config;
+        public LoginController(AppDbContext context, IConfiguration config)
+        {
+            _context = context;
+            _config = config;
+        }
+
 
         public LoginController(AppDbContext context)
         {
@@ -27,12 +38,35 @@ namespace SwordloginApi.Controllers
             if (user == null)
                 return Unauthorized(new { message = "Kullanıcı adı veya şifre hatalı" });
 
+            var claims = new[]
+    {
+        new Claim("id", user.Id.ToString()),
+        new Claim(ClaimTypes.Role, user.Role),
+        new Claim("username", user.Username)
+    };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("gizliAnahtar123")); // config'den alınabilir
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: "ARSServer",
+                audience: "ARSClient",
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(1),
+                signingCredentials: creds
+            );
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+
             return Ok(new
             {
                 message = "Giriş başarılı",
                 userId = user.Id,
                 username = user.Username,
-                role = user.Role // Role bilgisi doğrudan dönüyor
+                role = user.Role, // Role bilgisi doğrudan dönüyor
+                token = tokenString
+
             });
 
         }
