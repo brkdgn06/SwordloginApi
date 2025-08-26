@@ -39,7 +39,7 @@ namespace SwordloginApi.Controllers
         new Claim("username", user.Username)
     };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Jwt:Key")); // config'den alınabilir
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"])); // config'den alınabilir
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
