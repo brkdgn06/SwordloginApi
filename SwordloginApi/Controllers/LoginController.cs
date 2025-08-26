@@ -78,12 +78,15 @@ namespace SwordloginApi.Controllers
             {
 
                 var userIdClaim = User.FindFirst("id")?.Value;
-                if (userIdClaim == null)
-                    return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
+                if (string.IsNullOrEmpty(userIdClaim))
+                    return Unauthorized(new { message = "JWT içinde kullanıcı kimliği yok" });
+                int userId;
+                if (!int.TryParse(userIdClaim, out userId))
+                    return BadRequest(new { message = "Kullanıcı kimliği sayısal değil" });
 
                 var report = new PrivateReport
                 {
-                    UserId = int.Parse(userIdClaim),
+                    UserId = userId,
                     Subject = dto.subject,
                     Message = dto.message,
                     CreatedAt = DateTime.Now
