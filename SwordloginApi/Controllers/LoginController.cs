@@ -40,22 +40,52 @@ namespace SwordloginApi.Controllers
         [HttpPost("report")]
         public IActionResult SubmitReport([FromBody] PrivateReportDto dto)
         {
-            var userIdClaim = User.FindFirst("id")?.Value;
-            if (userIdClaim == null)
-                return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
-
-            var report = new PrivateReport
+            try
             {
-                UserId = int.Parse(userIdClaim),
-                Subject = dto.Subject,
-                Message = dto.Message,
-                CreatedAt = DateTime.Now
-            };
 
-            _context.PrivateReports.Add(report);
-            _context.SaveChanges();
+                var userIdClaim = User.FindFirst("id")?.Value;
+                if (userIdClaim == null)
+                    return Unauthorized(new { message = "Kullanıcı kimliği doğrulanamadı." });
 
-            return Ok(new { message = "Bildirim başarıyla gönderildi." });
+                var report = new PrivateReport
+                {
+                    UserId = int.Parse(userIdClaim),
+                    Subject = dto.subject,
+                    Message = dto.message,
+                    CreatedAt = DateTime.Now
+                };
+
+                _context.PrivateReports.Add(report);
+                _context.SaveChanges();
+
+                return Ok(new { message = "Bildirim başarıyla gönderildi." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Sunucu hatası", error = ex.Message });
+            }
+        }
+
+            [Authorize(Roles = "Admin")]
+        [HttpGet("reports")]
+        public IActionResult GetAllReports()
+        {
+            var reports = _context.PrivateReports
+                .Join(_context.Users,
+                      report => report.UserId,
+                      user => user.Id,
+                      (report, user) => new
+                      {
+                          report.Id,
+                          report.Subject,
+                          report.Message,
+                          report.CreatedAt,
+                          Username = user.Username
+                      })
+                .OrderByDescending(r => r.CreatedAt)
+                .ToList();
+
+            return Ok(reports);
         }
     }
 }

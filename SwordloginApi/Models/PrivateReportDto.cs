@@ -1,5 +1,5 @@
 ﻿public class PrivateReportDto
 {
-    public string Subject { get; set; }
-    public string Message { get; set; }
+    public string subject { get; set; }
+    public string message { get; set; }
 }
