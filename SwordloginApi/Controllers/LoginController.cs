@@ -131,8 +131,8 @@ namespace SwordloginApi.Controllers
                     .Select(r => new ReportSummaryDto
                     {
                         Id = r.Id,
-                        Username = r.Username,
-                        Subject = r.Subject
+                        Username = r.Username ??"Bilinmiyor",
+                        Subject = r.Subject ?? "Konu Yok"
                     })
                     .OrderByDescending(r => r.Id)
                     .ToList();
