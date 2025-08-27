@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -84,7 +85,8 @@ namespace SwordloginApi.Controllers
                     Username = dto.username,
                     Subject = dto.subject,
                     Message = dto.message,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow,
+                    TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time"))
                 };
 
                 _context.PrivateReports.Add(report);
