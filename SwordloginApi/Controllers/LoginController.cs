@@ -82,9 +82,9 @@ namespace SwordloginApi.Controllers
                 var report = new PrivateReport
                 {
                     UserId = userId,
-                    Username = dto.username,
-                    Subject = dto.subject,
-                    Message = dto.message,
+                    Username = dto.Username,
+                    Subject = dto.Subject,
+                    Message = dto.Message,
                     CreatedAt = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow,
                     TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time"))
                 };
@@ -121,11 +121,36 @@ namespace SwordloginApi.Controllers
 
             return Ok(reports);
         }
-        public class PrivateReportDto
+        [Authorize(Roles = "Admin")]
+        [HttpGet("report-summaries")]
+        public IActionResult GetReportSummaries()
         {
-            public string username { get; set; }
-            public string subject { get; set; }
-            public string message { get; set; }
+            var summaries = _context.PrivateReports
+                .Select(r => new ReportSummaryDto
+                {
+                    Id = r.Id,
+                    Username = r.Username,
+                    Subject = r.Subject
+                })
+                .OrderByDescending(r => r.Id)
+                .ToList();
+
+            return Ok(summaries);
+        }
+
+        [System.Serializable]
+        public class ReportSummary
+        {
+            public int Id;
+            public string Username;
+            public string Subject;
+        }
+
+        public class ReportSummaryDto
+        {
+            public int Id { get; set; }
+            public string Username { get; set; }
+            public string Subject { get; set; }
         }
 
     }
