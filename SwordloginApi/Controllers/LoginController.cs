@@ -81,7 +81,7 @@ namespace SwordloginApi.Controllers
                 var report = new PrivateReport
                 {
                     UserId = userId,
-                    Username = dto.Username,
+                    Username = dto.username,
                     Subject = dto.subject,
                     Message = dto.message,
                     CreatedAt = DateTime.Now
@@ -119,5 +119,12 @@ namespace SwordloginApi.Controllers
 
             return Ok(reports);
         }
+        public class PrivateReportDto
+        {
+            public string username { get; set; }
+            public string subject { get; set; }
+            public string message { get; set; }
+        }
+
     }
 }

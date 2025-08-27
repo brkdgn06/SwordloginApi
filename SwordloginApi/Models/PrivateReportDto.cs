@@ -1,6 +1,9 @@
-﻿public class PrivateReportDto
+﻿namespace SwordloginApi.Models
 {
-    public string subject { get; set; }
-    public string message { get; set; }
-    public string Username { get; set; }
+    public class PrivateReportDto
+    {
+        public string username { get; set; }
+        public string subject { get; set; }
+        public string message { get; set; }
+    }
 }
