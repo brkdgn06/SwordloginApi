@@ -125,18 +125,26 @@ namespace SwordloginApi.Controllers
         [HttpGet("report-summaries")]
         public IActionResult GetReportSummaries()
         {
-            var summaries = _context.PrivateReports
-                .Select(r => new ReportSummaryDto
-                {
-                    Id = r.Id,
-                    Username = r.Username,
-                    Subject = r.Subject
-                })
-                .OrderByDescending(r => r.Id)
-                .ToList();
+            try
+            {
+                var summaries = _context.PrivateReports
+                    .Select(r => new ReportSummaryDto
+                    {
+                        Id = r.Id,
+                        Username = r.Username,
+                        Subject = r.Subject
+                    })
+                    .OrderByDescending(r => r.Id)
+                    .ToList();
 
-            return Ok(summaries);
+                return Ok(summaries);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Sunucu hatası", error = ex.Message });
+            }
         }
+
 
         [System.Serializable]
         public class ReportSummary
