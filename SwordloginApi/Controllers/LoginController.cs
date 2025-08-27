@@ -81,6 +81,7 @@ namespace SwordloginApi.Controllers
                 var report = new PrivateReport
                 {
                     UserId = userId,
+                    Username = dto.Username,
                     Subject = dto.subject,
                     Message = dto.message,
                     CreatedAt = DateTime.Now
